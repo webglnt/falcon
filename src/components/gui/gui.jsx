@@ -302,7 +302,7 @@ const GUIComponent = props => {
         costume: costumesTab,
         sound: soundsTab,
         variable: variablesTab,
-        // file: filesTab,
+        file: filesTab,
     };
 
     // For now, rearranging tabs is not supported
