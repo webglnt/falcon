@@ -54,17 +54,17 @@ const Credits = () => (
     <main className={styles.main}>
         <header className={styles.headerContainer}>
             <h1 className={styles.headerText}>
-                PenguinMod Credits
+                FalconMod Credits
             </h1>
         </header>
         <section>
-            <h1>PenguinMod</h1>
+            <h1>FalconMod</h1>
         </section>
         <section>
             <h2>Thank you</h2>
             <p>
-                Without TurboWarp, PenguinMod may have never existed.
-                Thank you to everyone who worked on Scratch and TurboWarp,
+                Without TurboWarp and PenguinMod, FalconMod may have never existed.
+                Thank you to everyone who worked on Scratch, TurboWarp, and PenguinMod.
                 you have made many people finally be able to make whatever they can imagine.
             </p>
             <a href="https://scratch.mit.edu/donate">
@@ -76,18 +76,18 @@ const Credits = () => (
             </a>
             <h2>Contributors</h2>
             <p>
-                PenguinMod is made by a small bunch of developers.
-                A list is below, but you can also check <a href="https://github.com/orgs/PenguinMod/people">our GitHub</a> incase this one is out of date.
+                FalconMod is made by H3L, while PenguinMod, made by a small bunch of developers.
+                A list is below, but you can also check <a href="https://github.com/orgs/FalconMod/people">our GitHub</a>, <a href="https://github.com/orgs/PenguinMod/people">PenguinMod Github</a>, incase this one is out of date.
             </p>
             <UserList users={UserData.pmDevelopers} />
             <p><i>The list order is randomized on each refresh.</i></p>
-            <p>There are even community members who have helped develop PenguinMod. People like <i>you!</i></p>
+            <p>There are even community members who have helped develop PenguinMod and FalconMod. People like <i>you!</i></p>
             <UserList users={UserData.pmPullRequestDevelopers} />
             <p><i>The list order is randomized on each refresh.</i></p>
         </section>
         <section>
             <h2>GitHub Pages</h2>
-            <p>We currently use <a href="https://pages.github.com/">GitHub Pages</a> to host PenguinMod.</p>
+            <p>We currently use <a href="https://pages.github.com/">GitHub Pages</a> to host FalconMod.</p>
             <a href="https://pages.github.com/">
                 <img
                     src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/collections/github-pages-examples/github-pages-examples.png"
@@ -95,55 +95,12 @@ const Credits = () => (
                     height="160"
                 />
             </a>
-            <h2>Domain Provider</h2>
-            <p>
-                <a href="https://penguinmod.com">penguinmod.com</a> (and any subdomains) are currently
-                provided by <a href="https://github.com/enderhacker">NotHouse</a>.
-                <br></br>
-                <a href="https://github.com/enderhacker">
-                    <img src="https://avatars.githubusercontent.com/u/61245488?v=4" style={{ width: "128px" }}></img>
-                </a>
-            </p>
-            <h2>Server Host</h2>
-            <p>
-                PenguinMod's Project Sharing server is currently hosted by <a href="https://github.com/JoshAtticus">JoshAtticus</a>.
-                <br></br>
-                <a href="https://github.com/JoshAtticus">
-                    <img src="https://avatars.githubusercontent.com/u/72828296?v=4" style={{ width: "128px" }}></img>
-                </a>
-            </p>
-            <p>
-                The PenguinMod Server API is maintained by many people.
-                A list is below, but you can also check <a href="https://github.com/PenguinMod/PenguinMod-IntermediateBackendApi/graphs/contributors">the GitHub repository</a> incase this one is out of date.
-            </p>
-            <UserList users={UserData.pmApiDevelopers} />
-            <p><i>The list order is randomized on each refresh.</i></p>
             <h2>Sound Effects</h2>
             <p>
                 PenguinMod has added some more sounds to the Sound Library.
                 All PenguinMod sounds are
                 from <a href="https://freesound.org/">https://freesound.org/</a> and <a href="https://archive.org/">https://archive.org/</a> under
                 Public Domain licenses.
-            </p>
-            <h2>Accounts</h2>
-            <p>
-                Login is managed
-                by <a href="https://auth.itinerary.eu.org/">Scratch Auth</a> created
-                by <a href="https://scratch.mit.edu/users/Looky1173/">Looky1173</a>.
-                (thanks for adding us to the user list!)
-                <br />
-                <br />
-                <i>
-                    "Scratch Auth" is not actually affiliated with Scratch,
-                    the Scratch Team, or the Scratch Foundation.
-                </i>
-                <br />
-                <br />
-                <i>
-                    PenguinMod is also not owned or managed by Looky1173, please only comment on his profile
-                    <br />
-                    if the Scratch Auth page tells you that it failed, not if PenguinMod fails to load.
-                </i>
             </p>
         </section>
         <section>
@@ -152,7 +109,7 @@ const Credits = () => (
         <section>
             <h2>Extensions</h2>
             <p><i>
-                If you are an extension developer who wants their extension removed from PenguinMod's extensions list,
+                If you are an extension developer who wants their extension removed from FalconMod's extensions list,
                 contact us as soon as you can. We'll get it removed as soon as we are able to.
             </i></p>
             <p>
@@ -164,7 +121,7 @@ const Credits = () => (
             <UserList users={UserData.extensionDevelopers} />
             <p><i>The list order is randomized on each refresh.</i></p>
             <p>
-                PenguinMod also has a few people who made and submitted extensions too!
+                FalconMod and PenguinMod also has a few people who made and submitted extensions too!
                 This list may get outdated sometimes, but here they are listed below:
             </p>
             <UserList users={UserData.pmExtensionDevelopers} />
@@ -231,7 +188,7 @@ const Credits = () => (
                 far more than we could hope to list here.
             </p>
             <p>
-                PenguinMod is also (very very slowly) getting translated into other languages, in the future
+                FalconMod is also (very very very very very very very very very very very very very extremely extreme ultra very ultra pro max 16 pro plus very VERY slowly) getting translated into other languages, in the future
                 hopefully the same number of languages can be supported. It'll take a while until we get there though.
             </p>
             <p>Contributors:</p>
