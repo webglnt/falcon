@@ -28,16 +28,16 @@ import downloadBlob from '../lib/download-blob';
 
 import { connect } from 'react-redux';
 
-// import {
-//     closeSoundLibrary,
-//     openSoundLibrary,
-//     openSoundRecorder
-// } from '../reducers/modals';
+import {
+    closeSoundLibrary,
+    openSoundLibrary,
+    openSoundRecorder
+ } from '../reducers/modals';
 
-// import {
-//     activateTab,
-//     COSTUMES_TAB_INDEX
-// } from '../reducers/editor-tab';
+import {
+   activateTab,
+   COSTUMES_TAB_INDEX
+} from '../reducers/editor-tab';
 
 import { setRestore } from '../reducers/restore-deletion';
 import { showStandardAlert, closeAlertWithId } from '../reducers/alerts';

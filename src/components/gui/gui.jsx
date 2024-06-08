@@ -578,7 +578,7 @@ const GUIComponent = props => {
                                                 />
                                             </div>
                                         </MenuItem>}
-                                        {/* {!tabOrder.includes('file') && <MenuItem onClick={() => addTabToEditor('file')}>
+                                        { {!tabOrder.includes('file') && <MenuItem onClick={() => addTabToEditor('file')}>
                                             <div className={styles.tabAdditionItem}>
                                                 <img
                                                     draggable={false}
@@ -590,8 +590,10 @@ const GUIComponent = props => {
                                                     id="gui.gui.filesTab"
                                                 />
                                             </div>
-                                        </MenuItem>} */}
+                                        </MenuItem>} }
                                     </ContextMenu>
+
+                                
 
                                     <div id="sa_addons_after_add_tab_anchor" />
                                 </TabList>
