@@ -1375,7 +1375,7 @@ const operators = function (isInitialSetup) {
 const variables = function () {
     return `
     <category
-        name="%{BKY_CATEGORY_VARIABLES}"
+        name="Variables"
         id="variables"
         colour="#FF8C1A"
         secondaryColour="#DB6E00"
@@ -1399,7 +1399,7 @@ const lists = function () {
 const myBlocks = function () {
     return `
     <category
-        name="%{BKY_CATEGORY_MYBLOCKS}"
+        name="Functions"
         id="myBlocks"
         colour="#FF6680"
         secondaryColour="#FF4D6A"
