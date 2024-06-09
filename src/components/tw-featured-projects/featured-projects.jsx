@@ -14,7 +14,7 @@ class FeaturedProjects extends React.Component {
         bindAll(this, [
             'handleSelect',
             'handleOpenProjects'
-        ]);try
+        ]);
         this.state = {
             opened: false,
             transition: true
