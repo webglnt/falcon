@@ -4,6 +4,12 @@ const showSaveFilePicker = fileName => window.showSaveFilePicker({
     suggestedName: fileName,
     types: [
         {
+            description: 'FalconMod Project',
+            accept: {
+                'application/x.scratch.sb3': '.falcon'
+            }
+        },
+        {
             description: 'PenguinMod Project',
             accept: {
                 'application/x.scratch.sb3': '.pmp'
@@ -17,6 +23,12 @@ const showOpenFilePicker = async () => {
     const [handle] = await window.showOpenFilePicker({
         multiple: false,
         types: [
+            {
+                description: 'FalconMod Project',
+                accept: {
+                    'application/x.scratch.sb3': ['.falcon']
+                }
+            },
             {
                 description: 'PenguinMod Project',
                 accept: {
