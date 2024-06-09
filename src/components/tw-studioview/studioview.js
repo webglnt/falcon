@@ -306,11 +306,8 @@ StudioView.THUMBNAIL_SRC = 'https://trampoline.turbowarp.org/thumbnails/$id?widt
 
 // The URL for project pages.
 // $id is replaced with the project ID.
-StudioView.PROJECT_PAGE = 'https://turbowarp.org/$id';
+StudioView.PROJECT_PAGE = 'https://falconmod.github.io/editor/#$id';
 
-// The URL for studio pages.
-// $id is replaced with the studio ID.
-StudioView.STUDIO_PAGE = 'https://scratch.mit.edu/studios/$id/';
 
 // The amount of "placeholders" to insert before the next page loads.
 StudioView.PLACEHOLDER_COUNT = 9;

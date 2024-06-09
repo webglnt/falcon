@@ -212,14 +212,14 @@ class Interface extends React.Component {
                                 <div className={classNames(styles.infobox, styles.unsharedUpdate)}>
                                     <p>
                                         <FormattedMessage
-                                            defaultMessage="Unshared projects are no longer visible."
+                                            defaultMessage="Failed to get the PenguinMod Project."
                                             description="Appears on unshared projects"
                                             id="tw.unshared2.1"
                                         />
                                     </p>
                                     <p>
                                         <FormattedMessage
-                                            defaultMessage="For more information, visit: {link}"
+                                            defaultMessage="Does the project actually exist?"
                                             description="Appears on unshared projects"
                                             id="tw.unshared.2"
                                             values={{
