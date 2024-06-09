@@ -818,9 +818,9 @@ class MenuBar extends React.Component {
                                     )}</CloudVariablesToggler>
                                 </MenuSection>
                                 <MenuSection>
-                                    <MenuItem onClick={this.props.onClickSettings}>
+                                    <MenuItem onClick={this.props.onClickAddonSettings}>
                                         <FormattedMessage
-                                            defaultMessage="Gameplay Settings"
+                                            defaultMessage="Addons"
                                             description="Menu bar item for gameplay settings"
                                             id="pm.menuBar.moreSettings"
                                         />
