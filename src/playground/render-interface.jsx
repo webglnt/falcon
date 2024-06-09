@@ -26,13 +26,11 @@ import AppStateHOC from '../lib/app-state-hoc.jsx';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import TWProjectMetaFetcherHOC from '../lib/tw-project-meta-fetcher-hoc.jsx';
 import TWStateManagerHOC from '../lib/tw-state-manager-hoc.jsx';
-import TWThemeHOC from '../lib/tw-theme-hoc.jsx';
 import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import TWPackagerIntegrationHOC from '../lib/tw-packager-integration-hoc.jsx';
 import SettingsStore from '../addons/settings-store-singleton';
 import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
-import VoteFrame from './vote-frame.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import ProjectInput from '../components/tw-project-input/project-input.jsx';
 import FeaturedProjects from '../components/tw-featured-projects/featured-projects.jsx';
@@ -43,16 +41,14 @@ import {isBrowserSupported} from '../lib/tw-environment-support-prober';
 import AddonChannels from '../addons/channels';
 import {loadServiceWorker} from './load-service-worker';
 import runAddons from '../addons/entry';
+import {APP_NAME} from '../lib/brand.js';
 
 import styles from './interface.css';
-import restore from './restore.js';
 
-const urlparams = new URLSearchParams(location.search);
-const restoring = urlparams.get('restore');
-const restoreHandler = urlparams.get('handler');
-if (String(restoring) === 'true') {
-    // console.log(restore)
-    restore(restoreHandler);
+if (window.parent !== window) {
+    // eslint-disable-next-line no-alert
+    alert(`This page contains an invalid ${APP_NAME} embed. Please read https://docs.turbowarp.org/embedding for instructions to create a working embed.`);
+    throw new Error('Invalid embed');
 }
 
 let announcement = null;
@@ -62,41 +58,18 @@ if (process.env.ANNOUNCEMENT) {
     announcement.innerHTML = process.env.ANNOUNCEMENT;
 }
 
-const handleClickAddonSettings = () => {
+const handleClickAddonSettings = addonId => {
+    // addonId might be a string of the addon to focus on, undefined, or an event (treat like undefined)
     const path = process.env.ROUTING_STYLE === 'wildcard' ? 'addons' : 'addons.html';
-    window.open(`${process.env.ROOT}${path}`);
-};
-
-const xmlEscape = function (unsafe) {
-    return unsafe.replace(/[<>&'"]/g, c => {
-        switch (c) {
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '&': return '&amp;';
-        case '\'': return '&apos;';
-        case '"': return '&quot;';
-        }
-    });
-};
-const formatProjectTitle = _title => {
-    const title = xmlEscape(String(_title));
-    const emojiRegex = /:(\w+):/g;
-    return title.replace(emojiRegex, match => {
-        const emojiName = match.replace(/:/gmi, '');
-        return `<img
-            src="https://library.penguinmod.com/files/emojis/${emojiName}.png"
-            alt=":${emojiName}:"
-            title=":${emojiName}:"
-            style="width:1.75rem;vertical-align: middle;"
-        >`;
-    });
+    const url = `${process.env.ROOT}${path}${typeof addonId === 'string' ? `#${addonId}` : ''}`;
+    window.open(url);
 };
 
 const messages = defineMessages({
     defaultTitle: {
-        defaultMessage: 'Editor',
+        defaultMessage: 'Run Scratch projects faster',
         description: 'Title of homepage',
-        id: 'pm.guiDefaultTitle'
+        id: 'tw.guiDefaultTitle'
     }
 });
 
@@ -119,21 +92,6 @@ if (AddonChannels.changeChannel) {
 
 runAddons();
 
-/* todo: fix this and make it work properly */
-// const projectDetailCache = {};
-// const getProjectDetailsById = async (id) => {
-//     // if we have already gotten the details of this project, avoid making another request since they likely never changed
-//     if (projectDetailCache[String(id)] != null) return projectDetailCache[String(id)];
-
-//     const response = await fetch(`https://projects.penguinmod.com/api/projects/getPublished?id=${id}`);
-//     // Don't continue if the api never returned 200-299 since we would cache an error as project details
-//     if (!response.ok) return {};
-
-//     const project = await response.json();
-//     projectDetailCache[String(id)] = project;
-//     return projectDetailCache[String(id)];
-// };
-
 const Footer = () => (
     <footer className={styles.footer}>
         <div className={styles.footerContent}>
@@ -141,7 +99,7 @@ const Footer = () => (
                 <FormattedMessage
                     // eslint-disable-next-line max-len
                     defaultMessage="FalconMod, PenguinMod and TurboWarp are not affiliated with Scratch, the Scratch Team, or the Scratch Foundation."
-                    description="Disclaimer that PenguinMod and TurboWarp are not connected to Scratch"
+                    description="Disclaimer that TurboWarp is not connected to Scratch"
                     id="tw.footer.disclaimer"
                 />
             </div>
@@ -154,63 +112,24 @@ const Footer = () => (
                             id="tw.footer.credits"
                         />
                     </a>
-                    <a href="https://penguinmod.com/donate">
-                        <FormattedMessage
-                            defaultMessage="Donate"
-                            description="Donation link in footer"
-                            id="tw.footer.donate"
-                        />
-                    </a>
+
                 </div>
+            
                 <div className={styles.footerSection}>
-                    <a href="https://studio.penguinmod.com/PenguinMod-Packager">
-                        {/* Do not translate */}
-                        {'PenguinMod Packager'}
-                    </a>
-                    <a href="https://github.com/FalconMod">
+                
+                    <a href="https://github.com/FalconMod/">
                         <FormattedMessage
                             defaultMessage="Source Code"
                             description="Link to source code"
                             id="tw.code"
                         />
                     </a>
+            
                 </div>
             </div>
         </div>
     </footer>
 );
-
-const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-];
-const numberSuffixes = [
-    'st',
-    'nd',
-    'rd',
-    'th',
-    'th',
-    'th',
-    'th',
-    'th',
-    'th',
-    'th'
-];
-const addNumberSuffix = num => {
-    if (!num) return `${num}`;
-    if (num < 20 && num > 10) return `${num}th`;
-    return num + numberSuffixes[(num - 1) % 10];
-};
 
 class Interface extends React.Component {
     constructor (props) {
@@ -224,14 +143,9 @@ class Interface extends React.Component {
     }
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
-            document.title = `FalconMod - ${this.props.intl.formatMessage(messages.defaultTitle)}`;
+            document.title = `${APP_NAME} - ${this.props.intl.formatMessage(messages.defaultTitle)}`;
         } else {
-            document.title = `${title} - FalconMod`;
-        }
-    }
-    copyProjectLink (id) {
-        if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {
-            navigator.clipboard.writeText(`https://projects.penguinmod.com/${id}`);
+            document.title = `${title} - ${APP_NAME}`;
         }
     }
     render () {
@@ -239,30 +153,17 @@ class Interface extends React.Component {
             /* eslint-disable no-unused-vars */
             intl,
             hasCloudVariables,
-            title,
             description,
-            extraProjectInfo,
-            remixedProjectInfo,
             isFullScreen,
             isLoading,
             isPlayerOnly,
             isRtl,
-            onClickTheme,
             projectId,
             /* eslint-enable no-unused-vars */
             ...props
         } = this.props;
         const isHomepage = isPlayerOnly && !isFullScreen;
         const isEditor = !isPlayerOnly;
-        const isUpdated = extraProjectInfo.isUpdated;
-        const projectReleaseYear = extraProjectInfo.releaseDate.getFullYear();
-        const projectReleaseMonth = monthNames[extraProjectInfo.releaseDate.getMonth()];
-        const projectReleaseDay = addNumberSuffix(extraProjectInfo.releaseDate.getDate());
-        const projectReleaseHour = (extraProjectInfo.releaseDate.getHours() % 12) + 1;
-        const projectReleaseHalf = extraProjectInfo.releaseDate.getHours() > 11
-            ? 'PM'
-            : 'AM';
-        const projectReleaseMinute = extraProjectInfo.releaseDate.getMinutes();
         return (
             <div
                 className={classNames(styles.container, {
@@ -275,45 +176,22 @@ class Interface extends React.Component {
                         <WrappedMenuBar
                             canChangeLanguage
                             canManageFiles
+                            canChangeTheme
                             enableSeeInside
                             onClickAddonSettings={handleClickAddonSettings}
-                            onClickTheme={onClickTheme}
                         />
                     </div>
                 ) : null}
                 <div
                     className={styles.center}
                     style={isPlayerOnly ? ({
-                        // add a couple pixels to account for border (TODO: remove weird hack)
+                        // + 2 accounts for 1px border on each side of the stage
                         width: `${Math.max(480, props.customStageSize.width) + 2}px`
                     }) : null}
                 >
                     {isHomepage && announcement ? <DOMElementRenderer domElement={announcement} /> : null}
-                    {isHomepage && projectId !== '0' && title && extraProjectInfo && extraProjectInfo.author && <div className={styles.projectDetails}>
-                        <a
-                            target="_blank"
-                            href={`https://penguinmod.com/profile?user=${extraProjectInfo.author}`}
-                            rel="noreferrer"
-                        >
-                            <img
-                                className={styles.projectAuthorImage}
-                                title={extraProjectInfo.author}
-                                alt={extraProjectInfo.author}
-                                src={`https://trampoline.turbowarp.org/avatars/by-username/${extraProjectInfo.author}`}
-                            />
-                        </a>
-                        <div className={styles.projectMetadata}>
-                            <h2 dangerouslySetInnerHTML={{__html: formatProjectTitle(title)}} />
-                            <p>by <a
-                                target="_blank"
-                                href={`https://penguinmod.com/profile?user=${extraProjectInfo.author}`}
-                                rel="noreferrer"
-                            >{extraProjectInfo.author}</a></p>
-                        </div>
-                    </div>}
                     <GUI
                         onClickAddonSettings={handleClickAddonSettings}
-                        onClickTheme={onClickTheme}
                         onUpdateProjectTitle={this.handleUpdateProjectTitle}
                         backpackVisible
                         backpackHost="_local_"
@@ -321,55 +199,59 @@ class Interface extends React.Component {
                     />
                     {isHomepage ? (
                         <React.Fragment>
-                            {/* project not approved message */}
-                            {(!extraProjectInfo.accepted) && (
-                                <div className={styles.remixWarningBox}>
-                                    <p>
-                                        This project is currently under review.
-                                        Content may not be suitable for all ages,
-                                        and you should be careful when running the project.
-                                    </p>
-                                </div>
-                            )}
-                            {/* remix info */}
-                            {(extraProjectInfo.isRemix && remixedProjectInfo.loaded) && (
-                                <div className={styles.unsharedUpdate}>
-                                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                                        <a
-                                            style={{height: '32px'}}
-                                            target="_blank"
-                                            href={`https://penguinmod.com/profile?user=${remixedProjectInfo.author}`}
-                                            rel="noreferrer"
-                                        >
-                                            <img
-                                                className={styles.remixAuthorImage}
-                                                title={remixedProjectInfo.author}
-                                                alt={remixedProjectInfo.author}
-                                                src={`https://trampoline.turbowarp.org/avatars/by-username/${remixedProjectInfo.author}`}
-                                            />
-                                        </a>
-                                        <p>
-                                            Thanks to <b>
-                                                <a
-                                                    target="_blank"
-                                                    href={`https://penguinmod.com/profile?user=${remixedProjectInfo.author}`}
-                                                    rel="noreferrer"
-                                                >
-                                                    {remixedProjectInfo.author}
-                                                </a>
-                                            </b> for the original project <b>
-                                                <a
-                                                    href={`${window.location.origin}/#${extraProjectInfo.remixId}`}
-                                                >
-                                                    {remixedProjectInfo.name}
-                                                </a>
-                                            </b>.
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
                             {isBrowserSupported() ? null : (
                                 <BrowserModal isRtl={isRtl} />
+                            )}
+                            <div className={styles.section}>
+                                <ProjectInput />
+                            </div>
+                            {(
+                                // eslint-disable-next-line max-len
+                                description.instructions === 'unshared' || description.credits === 'unshared'
+                            ) && (
+                                <div className={classNames(styles.infobox, styles.unsharedUpdate)}>
+                                    <p>
+                                        <FormattedMessage
+                                            defaultMessage="Unshared projects are no longer visible."
+                                            description="Appears on unshared projects"
+                                            id="tw.unshared2.1"
+                                        />
+                                    </p>
+                                    <p>
+                                        <FormattedMessage
+                                            defaultMessage="For more information, visit: {link}"
+                                            description="Appears on unshared projects"
+                                            id="tw.unshared.2"
+                                            values={{
+                                                link: (
+                                                    <a
+                                                        href="https://docs.turbowarp.org/unshared-projects"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {'https://docs.turbowarp.org/unshared-projects'}
+                                                    </a>
+                                                )
+                                            }}
+                                        />
+                                    </p>
+                                    <p>
+                                        <FormattedMessage
+                                            // eslint-disable-next-line max-len
+                                            defaultMessage="If the project was shared recently, this message may appear incorrectly for a few minutes."
+                                            description="Appears on unshared projects"
+                                            id="tw.unshared.cache"
+                                        />
+                                    </p>
+                                    <p>
+                                        <FormattedMessage
+                                            // eslint-disable-next-line max-len
+                                            defaultMessage="If this project is actually shared, please report a bug."
+                                            description="Appears on unshared projects"
+                                            id="tw.unshared.bug"
+                                        />
+                                    </p>
+                                </div>
                             )}
                             {hasCloudVariables && projectId !== '0' && (
                                 <div className={styles.section}>
@@ -385,51 +267,22 @@ class Interface extends React.Component {
                                     />
                                 </div>
                             ) : null}
-                            {extraProjectInfo.author && (
-                                <VoteFrame
-                                    id={projectId}
-                                    darkmode={this.props.isDark}
-                                />
-                            )}
-                            {projectId !== '0' && extraProjectInfo.author && (
-                                <div>
-                                    {`${isUpdated ? 'Updated' : 'Uploaded'} ${projectReleaseMonth} ${projectReleaseDay} ${projectReleaseYear} at ${projectReleaseHour}:${projectReleaseMinute < 10 ? '0' : ''}${projectReleaseMinute} ${projectReleaseHalf}`}
-                                    <div className={styles.centerSector}>
-                                        <button
-                                            onClick={() => this.copyProjectLink(projectId)}
-                                            className={styles.shareLink}
-                                        >
-                                            <img
-                                                src="/share_project.png"
-                                                alt=">"
-                                            />
-                                            {'Copy Link'}
-                                        </button>
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            href={`https://penguinmod.com/report?type=project&id=${projectId}`}
-                                            className={styles.reportLink}
-                                        >
-                                            <img
-                                                src="/report_flag.png"
-                                                alt="!"
-                                            />
-                                            {'Report'}
-                                        </a>
-                                    </div>
-                                </div>
-                            )}
                             <div className={styles.section}>
-                                <FeaturedProjects />
+                                <p>
+                                    <FormattedMessage
+                                        // eslint-disable-next-line max-len
+                                        defaultMessage="{APP_NAME} is a Scratch mod that compiles projects to JavaScript to make them run really fast. Try it out by inputting a project ID or URL above or choosing a featured project below."
+                                        description="Description of TurboWarp on the homepage"
+                                        id="tw.home.description"
+                                        values={{
+                                            APP_NAME
+                                        }}
+                                    />
+                                </p>
                             </div>
-                            <a
-                                target="_blank"
-                                href="https://penguinmod.com/search?q=all:projects"
-                                rel="noreferrer"
-                            >
-                                See more projects
-                            </a>
+                            <div className={styles.section}>
+                                <FeaturedProjects studio="27205657" />
+                            </div>
                         </React.Fragment>
                     ) : null}
                 </div>
@@ -450,35 +303,17 @@ Interface.propTypes = {
         credits: PropTypes.string,
         instructions: PropTypes.string
     }),
-    extraProjectInfo: PropTypes.shape({
-        accepted: PropTypes.bool,
-        isRemix: PropTypes.bool,
-        remixId: PropTypes.number,
-        tooLarge: PropTypes.bool,
-        author: PropTypes.string,
-        releaseDate: PropTypes.shape(Date),
-        isUpdated: PropTypes.bool
-    }),
-    remixedProjectInfo: PropTypes.shape({
-        loaded: PropTypes.bool,
-        name: PropTypes.string,
-        author: PropTypes.string
-    }),
     isFullScreen: PropTypes.bool,
     isLoading: PropTypes.bool,
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
-    onClickTheme: PropTypes.func,
     projectId: PropTypes.string
 };
 
 const mapStateToProps = state => ({
     hasCloudVariables: state.scratchGui.tw.hasCloudVariables,
     customStageSize: state.scratchGui.customStageSize,
-    title: state.scratchGui.projectTitle,
     description: state.scratchGui.tw.description,
-    extraProjectInfo: state.scratchGui.tw.extraProjectInfo,
-    remixedProjectInfo: state.scratchGui.tw.remixedProjectInfo,
     isFullScreen: state.scratchGui.mode.isFullScreen,
     isLoading: getIsLoading(state.scratchGui.projectState.loadingState),
     isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
@@ -498,7 +333,6 @@ const WrappedInterface = compose(
     ErrorBoundaryHOC('TW Interface'),
     TWProjectMetaFetcherHOC,
     TWStateManagerHOC,
-    TWThemeHOC,
     TWPackagerIntegrationHOC
 )(ConnectedInterface);
 

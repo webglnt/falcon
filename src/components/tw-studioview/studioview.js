@@ -1,6 +1,6 @@
 /* eslint-disable */
 // Imported from:
-// https://github.com/forkphorus/forkphorus/tree/master/studioview
+// https://github.com/TurboWarp/scratch-gui/tree/master/studioview
 // With changes to make it work properly in the scratch-gui environment.
 // todo: we have to see if we are leaking memory when this is mounted and unmounted, esp. because of event listeners
 // todo: use react-intl for translations
@@ -56,7 +56,7 @@ StudioView.prototype.addProject = function (details) {
         el = this.createPlaceholder();
         this.projectList.appendChild(el);
     }
-    this.placeholderToProject(el, details.id, details.title, details.author, details.featured);
+    this.placeholderToProject(el, details.id, details.title, details.author);
 };
 
 /**
@@ -104,11 +104,8 @@ StudioView.prototype.createPlaceholder = function () {
 /**
  * Convert a placeholder element made by createPlaceholder to a project element.
  */
-StudioView.prototype.placeholderToProject = function (el, id, title, author, featured) {
+StudioView.prototype.placeholderToProject = function (el, id, title, author) {
     el.className = classNames(styles.studioviewProject, styles.studioviewLoaded);
-    if (featured == true) {
-        el.className = classNames(styles.studioviewProject, styles.studioviewLoaded, styles.featuredStudioviewProject);
-    }
     el.dataset.id = id;
     el.dataset.title = title;
     el.dataset.author = author;
@@ -243,7 +240,7 @@ StudioView.prototype.loadNextPage = function () {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.onload = function () {
-        var rawProjects = xhr.response.projects;
+        var rawProjects = xhr.response;
         if (!Array.isArray(rawProjects)) {
             xhr.onerror();
             return;
@@ -253,9 +250,8 @@ StudioView.prototype.loadNextPage = function () {
             var p = rawProjects[i];
             projects.push({
                 id: p.id,
-                title: p.name,
-                author: p.author.username,
-                featured: p.featured,
+                title: p.title,
+                author: p.username,
             });
         }
         projects = this.shuffler(projects);
@@ -287,28 +283,34 @@ StudioView.prototype.loadNextPage = function () {
         this.ended = true;
     }.bind(this);
 
-    var url = StudioView.STUDIO_API + "/pmWrapper/projects"
+    var url = StudioView.STUDIO_API
+        .replace('$id', this.studioId)
+        .replace('$offset', '' + this.offset);
     xhr.open('GET', url);
     xhr.send();
 };
 
 StudioView.prototype.getURL = function () {
-    return 'no studio'
+    return StudioView.STUDIO_PAGE.replace('$id', this.studioId);
 };
 
 StudioView.prototype.onselect = function (id, el) { };
 StudioView.prototype.onpageload = function () { };
 StudioView.prototype.onend = function () { };
 
-StudioView.STUDIO_API = 'https://projects.penguinmod.com/api';
+StudioView.STUDIO_API = 'https://trampoline.turbowarp.org/api/studios/$id/projects?offset=$offset';
 
 // The URL to download thumbnails from.
 // $id is replaced with the project's ID.
-StudioView.THUMBNAIL_SRC = 'https://projects.penguinmod.com/api/pmWrapper/iconUrl?id=$id';
+StudioView.THUMBNAIL_SRC = 'https://trampoline.turbowarp.org/thumbnails/$id?width=144&height=108';
 
 // The URL for project pages.
 // $id is replaced with the project ID.
-StudioView.PROJECT_PAGE = 'https://studio.penguinmod.com/#$id';
+StudioView.PROJECT_PAGE = 'https://turbowarp.org/$id';
+
+// The URL for studio pages.
+// $id is replaced with the studio ID.
+StudioView.STUDIO_PAGE = 'https://scratch.mit.edu/studios/$id/';
 
 // The amount of "placeholders" to insert before the next page loads.
 StudioView.PLACEHOLDER_COUNT = 9;
