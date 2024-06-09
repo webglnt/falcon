@@ -37,55 +37,7 @@ class FeaturedProjects extends React.Component {
             opened: true
         });
     }
-    render () {
-        const opened = this.state.opened;
-        return (
-            <div className={styles.container}>
-                <div
-                    className={classNames(
-                        styles.projects,
-                        {
-                            [styles.opened]: opened,
-                            [styles.transition]: this.state.transition
-                        }
-                    )}
-                >
-                    <StudioView
-                        id={this.props.studio}
-                        onSelect={this.handleSelect}
-                        placeholder={!opened}
-                    />
-                    {opened ? null : (
-                        <div
-                            className={styles.openerContainer}
-                            onClick={this.handleOpenProjects}
-                        >
-                            <div className={styles.openerContent}>
-                                <FormattedMessage
-                                    defaultMessage="Click to view featured projects."
-                                    description="Text to view featured projects"
-                                    id="tw.viewFeaturedProjects"
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <div className={styles.footer}>
-                    <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={`https://scratch.mit.edu/studios/${this.props.studio}/`}
-                    >
-                        <FormattedMessage
-                            defaultMessage="View studio on Scratch."
-                            description="Link to turbowarp featured projects studio"
-                            id="tw.featuredProjectsStudio"
-                        />
-                    </a>
-                </div>
-            </div>
-        );
-    }
+   
 }
 
 FeaturedProjects.propTypes = {
